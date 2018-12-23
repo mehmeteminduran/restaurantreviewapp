@@ -78,7 +78,7 @@ initMap = () => {
         scrollWheelZoom: false
       });
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-    mapboxToken: '<your MAPBOX API KEY HERE>',
+    mapboxToken: 'pk.eyJ1IjoibWVobWV0MzY0NiIsImEiOiJjanB6ajk4M2gwY21lNDhreHM1dWdlampiIn0.yzg9-rX7ydALFbrlpc9VVQ',
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
       '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -146,6 +146,15 @@ resetRestaurants = (restaurants) => {
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
+  ul.setAttribute("tabindex", "0");
+  ul.setAttribute("aria-label", "restaurants list");
+  if (restaurants.length === 0) {
+    let noResults = document.createElement("h1");
+    noResults.innerHTML = "Not found any result";
+    noResults.setAttribute("tabindex", "0");
+    ul.appendChild(noResults);
+    return;
+  }
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
   });
@@ -161,10 +170,12 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt = restaurant.name;
   li.append(image);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
+  name.setAttribute("tabindex", "0");
   li.append(name);
 
   const neighborhood = document.createElement('p');
@@ -173,6 +184,7 @@ createRestaurantHTML = (restaurant) => {
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
+  address.setAttribute("tabindex", "0");
   li.append(address);
 
   const more = document.createElement('a');

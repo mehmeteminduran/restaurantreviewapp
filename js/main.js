@@ -1,3 +1,19 @@
+/*
+ * Register the service worker after DOM content has loaded
+ */
+window.addEventListener('load', function () {
+  //check if browser supports service workers,
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.register('./sw.js', {
+      scope: './'
+    }).then(function (reg) {
+      console.log("Service Worker Registered with scope: ", reg.scope);
+    }).catch(function (err) {
+      console.log("Service Worker failed to register: ", err);
+    });
+  }
+});
+
 let restaurants,
   neighborhoods,
   cuisines
@@ -73,10 +89,10 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
  */
 initMap = () => {
   self.newMap = L.map('map', {
-        center: [40.722216, -73.987501],
-        zoom: 12,
-        scrollWheelZoom: false
-      });
+    center: [40.722216, -73.987501],
+    zoom: 12,
+    scrollWheelZoom: false
+  });
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
     mapboxToken: 'pk.eyJ1IjoibWVobWV0MzY0NiIsImEiOiJjanB6ajk4M2gwY21lNDhreHM1dWdlampiIn0.yzg9-rX7ydALFbrlpc9VVQ',
     maxZoom: 18,
@@ -209,7 +225,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 
-} 
+}
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map

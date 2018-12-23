@@ -1,3 +1,4 @@
+
 let staticCacheName = "restaurants-cache-v1";
 let urlsToCache = [
     'js/main.js',
@@ -45,18 +46,14 @@ self.addEventListener("activate", event => {
  * Fetching for offline content viewing
  */
 self.addEventListener("fetch", event => {
-    if (event.request.url.startsWith(self.location.origin)) {
-        event.respondWith(
-            caches.match(event.request.url).then(response => {
-                if (response) {
-                    return response;
-                } else {
-                    fetch(event.request).then(networkResponse => {
-                        cache.put(event.request.url, networkResponse.clone());
-                        return networkResponse;
-                    })
-                }
-            })
-        );
+    if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+        return;
     }
+    event.respondWith(
+        caches.match(event.request)
+            .then(function (response) {
+                return response || fetch(event.request);
+            })
+    );
+
 });

@@ -1,6 +1,7 @@
 
 let staticCacheName = "restaurants-cache-v1";
 let urlsToCache = [
+    './',
     'js/main.js',
     'js/restaurant_info.js',
     'js/dbhelper.js',
